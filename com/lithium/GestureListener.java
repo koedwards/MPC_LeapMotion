@@ -1,6 +1,8 @@
 package com.lithium;
 
-public class GestureListener {
+import com.leapmotion.leap.*;
+
+public class GestureListener extends Listener {
   private static SoundPlayer sp;
   
   public static void main(String[] args) {
@@ -15,5 +17,14 @@ public class GestureListener {
     //   sp.playSound(SoundPlayer.LEFT);
     // }
     // (et c.)
+  }
+  
+  public void onConnect(Controller c) {
+    System.out.println("connected");
+    //controller.enableGesture();
+  }
+  
+  public void onFrame(Controller c) {
+    System.out.println("frame available");
   }
 }

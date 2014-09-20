@@ -1,3 +1,5 @@
+package com.lithium;
+
 public class SoundPlayer {
   // for swiping left
   public final String LEFT = "sound.wav";
