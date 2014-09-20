@@ -3,6 +3,9 @@ package com.lithium;
 import javax.swing.*;
 import java.util.*;
 import java.awt.*;
+
+import java.awt.event.KeyEvent;
+
 import com.leapmotion.leap.*;
 import java.io.IOException;
 
@@ -81,6 +84,32 @@ public class LithiumGui extends JFrame {
 		//Display the window.
 		frame.pack();
 		frame.setVisible(true);
+		
+		JMenuBar menuBar;
+		JMenu menu;
+		JMenuItem menuItem;
+		JCheckBoxMenuItem spectrogramEnable;
+		
+		menuBar = new JMenuBar();
+		
+		menu = new JMenu("File");
+		menu.setMnemonic(KeyEvent.VK_F);
+		menuBar.add(menu);
+		
+		menuItem = new JMenuItem("Exit", KeyEvent.VK_Q);
+		menuItem.getAccessibleContext().setAccessibleDescription("Exits the program");
+		menu.add(menuItem);
+		
+		menu = new JMenu("Tools");
+		menu.setMnemonic(KeyEvent.VK_T);
+		menu.getAccessibleContext().setAccessibleDescription("Contains tools for the Lithium program");
+		menuBar.add(menu);
+		
+		spectrogramEnable = new JCheckBoxMenuItem("Enable Spectrogram");
+		spectrogramEnable.setMnemonic(KeyEvent.VK_S);
+		menu.add(spectrogramEnable);
+		
+		frame.setJMenuBar(menuBar);
 	}
 	
 	public static void updateTextArea(String s) {
