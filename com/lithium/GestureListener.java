@@ -4,6 +4,7 @@ import com.leapmotion.leap.*;
 
 public class GestureListener extends Listener {
   private SoundPlayer sp;
+  String currentGesture = null;
   
   public GestureListener() {
     sp = new SoundPlayer();
@@ -19,19 +20,34 @@ public class GestureListener extends Listener {
     //System.out.println("frame available");
 	GestureList gesture = c.frame().gestures();
 	if (gesture.count() > 0) {
-	  if (gesture.get(0).type() == Gesture.Type.TYPE_SWIPE) {
-		SwipeGesture swipeGesture = new SwipeGesture(gesture.get(0));
-		Vector swipeDirection = swipeGesture.direction();
+	  if (currentGesture == null) {
+		currentGesture = gesture.get(0).type().toString();
+		if (gesture.get(0).type() == Gesture.Type.TYPE_SWIPE) {
+		  
+		  SwipeGesture swipeGesture = new SwipeGesture(gesture.get(0));
+		  Vector swipeDirection = swipeGesture.direction();
+			
 		  if (swipeDirection.getX() < 0) {
+				
 		    sp.playSound(SoundPlayer.LEFT);
+
 		  }
 		  else {
-		    sp.playSound(SoundPlayer.RIGHT);
+			
+			sp.playSound(SoundPlayer.RIGHT);
+				
 		  }
-	  }
-	  if (gesture.get(0).type() == Gesture.Type.TYPE_KEY_TAP) {
-	    sp.playSound(SoundPlayer.TAP);
-	  }
+		}
+		  
+		if (gesture.get(0).type() == Gesture.Type.TYPE_KEY_TAP) {
+		  
+		  sp.playSound(SoundPlayer.TAP);
+		  
+		}
+      }
+	} 
+	else {
+	  currentGesture = null;
 	}
 	
   }
