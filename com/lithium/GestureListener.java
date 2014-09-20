@@ -3,10 +3,10 @@ package com.lithium;
 import com.leapmotion.leap.*;
 
 public class GestureListener extends Listener {
-  //private SoundPlayer sp;
+  private SoundPlayer sp;
   
   public GestureListener() {
-    //sp = new SoundPlayer();
+    sp = new SoundPlayer();
   }
   
   public void onConnect(Controller c) {
@@ -23,14 +23,14 @@ public class GestureListener extends Listener {
 		SwipeGesture swipeGesture = new SwipeGesture(gesture.get(0));
 		Vector swipeDirection = swipeGesture.direction();
 		  if (swipeDirection.getX() < 0) {
-		    System.out.println("Playing Sound 1");
+		    sp.playSound(SoundPlayer.LEFT);
 		  }
 		  else {
-		    System.out.println("Playing Sound 3");
+		    sp.playSound(SoundPlayer.RIGHT);
 		  }
 	  }
 	  if (gesture.get(0).type() == Gesture.Type.TYPE_KEY_TAP) {
-	    System.out.println("Playing Sound 2");
+	    sp.playSound(SoundPlayer.TAP);
 	  }
 	}
 	
