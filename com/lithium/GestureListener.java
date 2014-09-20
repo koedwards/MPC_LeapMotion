@@ -39,6 +39,7 @@ public class GestureListener extends Listener {
 			  sp.playSound(SoundPlayer.RIGHT);
 				
 		    }
+		  }
 		  else {
 			
 			if (swipeDirection.getY() < 0) {
@@ -61,6 +62,5 @@ public class GestureListener extends Listener {
 	else {
 	  currentGesture = null;
 	}
-	
+	}
   }
-}
