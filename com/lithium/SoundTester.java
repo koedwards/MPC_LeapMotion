@@ -9,19 +9,7 @@ public class SoundTester {
       System.out.println("left");
       sp.playSound(SoundPlayer.LEFT);
       Thread.sleep(1000);
-	  
-	  System.out.println("left");
-      sp.playSound(SoundPlayer.LEFT);
-      Thread.sleep(1000);
-	  
-	  System.out.println("left");
-      sp.playSound(SoundPlayer.LEFT);
-      Thread.sleep(1000);
-	  
-	  System.out.println("left");
-      sp.playSound(SoundPlayer.LEFT);
-      Thread.sleep(1000);
-      
+
       System.out.println("right");
       sp.playSound(SoundPlayer.RIGHT);
       Thread.sleep(1000);

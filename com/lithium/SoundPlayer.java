@@ -6,11 +6,17 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import javax.sound.sampled.AudioFormat;
 import javax.sound.sampled.AudioInputStream;
 import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.Clip;
 import javax.sound.sampled.DataLine;
+import javax.sound.sampled.Line;
+import javax.sound.sampled.LineEvent;
+import javax.sound.sampled.LineListener;
 import javax.sound.sampled.LineUnavailableException;
 import javax.sound.sampled.UnsupportedAudioFileException;
 
@@ -21,19 +27,16 @@ public class SoundPlayer {
   public static final String DOWN  = "res/sounds/kick.wav";
   public static final String TAP   = "res/sounds/snare.wav";
   
-  private AudioInputStream leftClip;
-  private AudioInputStream rightClip;
-  private AudioInputStream upClip;
-  private AudioInputStream downClip;
-  private AudioInputStream tapClip;
+  HashMap<String,Clip> clips = new HashMap<String,Clip>();
 
   public SoundPlayer() {
+    HashMap<String, AudioInputStream> ais = new HashMap<String, AudioInputStream>();
     try {
-      leftClip  = AudioSystem.getAudioInputStream(new BufferedInputStream(new FileInputStream(LEFT)));
-      rightClip = AudioSystem.getAudioInputStream(new BufferedInputStream(new FileInputStream(RIGHT)));
-      upClip    = AudioSystem.getAudioInputStream(new BufferedInputStream(new FileInputStream(UP)));
-      downClip  = AudioSystem.getAudioInputStream(new BufferedInputStream(new FileInputStream(DOWN)));
-      tapClip   = AudioSystem.getAudioInputStream(new BufferedInputStream(new FileInputStream(TAP)));
+      ais.put(LEFT,   AudioSystem.getAudioInputStream(new BufferedInputStream(new FileInputStream(LEFT))));
+      ais.put(RIGHT,  AudioSystem.getAudioInputStream(new BufferedInputStream(new FileInputStream(RIGHT))));
+      ais.put(UP,     AudioSystem.getAudioInputStream(new BufferedInputStream(new FileInputStream(UP))));
+      ais.put(DOWN,   AudioSystem.getAudioInputStream(new BufferedInputStream(new FileInputStream(DOWN))));
+      ais.put(TAP,    AudioSystem.getAudioInputStream(new BufferedInputStream(new FileInputStream(TAP))));
     } catch (UnsupportedAudioFileException e) {
       e.printStackTrace();
     } catch (FileNotFoundException e1) {
@@ -41,45 +44,33 @@ public class SoundPlayer {
     } catch (IOException e2) {
       e2.printStackTrace();
     }
+    
+    for (Map.Entry<String, AudioInputStream> entry : ais.entrySet()) {
+      String name = entry.getKey();
+      AudioInputStream theAis = entry.getValue();
+      
+      AudioFormat fmt = theAis.getFormat();
+      DataLine.Info info = new DataLine.Info(Clip.class, fmt);
+      Clip clip = null;
+      try {
+        clip = (Clip) AudioSystem.getLine(info);
+        clip.open(theAis);
+      } catch (LineUnavailableException e) {
+        e.printStackTrace();
+      } catch (IOException e1) {
+        e1.printStackTrace();
+      }
+      clips.put(name, clip);
+    }
   }
   
   public void playSound(String sound) {
-    AudioInputStream theClip;
-    switch (sound) {
-      case LEFT:
-        theClip = leftClip;
-        break;
-      
-      case RIGHT:
-        theClip = rightClip;
-        break;
-      
-      case UP:
-        theClip = upClip;
-        break;
-      
-      case DOWN:
-        theClip = downClip;
-        break;
-      
-      case TAP:
-        theClip = tapClip;
-        break;
-        
-      default:
-        return;
+    Clip theClip = clips.get(sound);
+    if (theClip == null) {
+      return;
     }
     
-    AudioFormat format = theClip.getFormat();
-    DataLine.Info info = new DataLine.Info(Clip.class, format);
-    try {
-      Clip audioClip = (Clip)AudioSystem.getLine(info);
-      audioClip.open(theClip);
-      audioClip.start();
-    } catch (LineUnavailableException e) {
-      e.printStackTrace();
-    } catch (IOException e1) {
-      e1.printStackTrace();
-    }
+    theClip.setMicrosecondPosition(0L);
+    theClip.start();
   }
 }
