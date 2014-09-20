@@ -3,28 +3,36 @@ package com.lithium;
 import com.leapmotion.leap.*;
 
 public class GestureListener extends Listener {
-  private static SoundPlayer sp;
+  //private SoundPlayer sp;
   
-  public static void main(String[] args) {
-    // set up listener
-    // sp = new SoundPlayer();
-  }
-  
-  private void gestureRecieved(Gesture gesture) {
-    // we got a gesture.
-    // we want to play a sound.
-    // if (gesture == Gesture.LEFT) {
-    //   sp.playSound(SoundPlayer.LEFT);
-    // }
-    // (et c.)
+  public GestureListener() {
+    //sp = new SoundPlayer();
   }
   
   public void onConnect(Controller c) {
     System.out.println("connected");
-    //controller.enableGesture();
+    c.enableGesture(Gesture.Type.TYPE_KEY_TAP);
+	c.enableGesture(Gesture.Type.TYPE_SWIPE);
   }
   
   public void onFrame(Controller c) {
-    System.out.println("frame available");
+    //System.out.println("frame available");
+	GestureList gesture = c.frame().gestures();
+	if (gesture.count() > 0) {
+	  if (gesture.get(0).type() == Gesture.Type.TYPE_SWIPE) {
+		SwipeGesture swipeGesture = new SwipeGesture(gesture.get(0));
+		Vector swipeDirection = swipeGesture.direction();
+		  if (swipeDirection.getX() < 0) {
+		    System.out.println("Playing Sound 1");
+		  }
+		  else {
+		    System.out.println("Playing Sound 3");
+		  }
+	  }
+	  if (gesture.get(0).type() == Gesture.Type.TYPE_KEY_TAP) {
+	    System.out.println("Playing Sound 2");
+	  }
+	}
+	
   }
 }
