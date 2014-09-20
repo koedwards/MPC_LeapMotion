@@ -5,6 +5,7 @@ import com.leapmotion.leap.*;
 public class GestureListener extends Listener {
 	private SoundPlayer sp;
 	String currentGesture = null;
+	private LithiumGui lg;
 
 	public GestureListener() {
 		sp = new SoundPlayer();
@@ -45,22 +46,27 @@ public class GestureListener extends Listener {
 					switch (finger.type()) {
 						case TYPE_INDEX:
 							sp.playSound(SoundPlayer.LEFT);
+							lg.updateTextArea("CLAP");
 							break;
 						
 						case TYPE_THUMB:
 							sp.playSound(SoundPlayer.RIGHT);
+							lg.updateTextArea("COWBELL");
 							break;
 							
 						case TYPE_MIDDLE:
 							sp.playSound(SoundPlayer.UP);
+							lg.updateTextArea("HIHAT");
 							break;
 						
 						case TYPE_RING:
 							sp.playSound(SoundPlayer.DOWN);
+							lg.updateTextArea("KICKSTAND");
 							break;
 						
 						case TYPE_PINKY:
 							sp.playSound(SoundPlayer.TAP);
+							lg.updateTextArea("SNARE");
 							break;
 						
 						default:
