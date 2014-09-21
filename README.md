@@ -1,6 +1,28 @@
-MPC using the LeapMotion
-========================================
+Lithium Music Production Center
+================================
 
-This will use the LeapMotion technology to create a virtual sampler.
+Music at your fingertips.
 
-sam was here
+==========DESCRIPTION===========
+
+Lithium uses the LeapMotion sensor to create a virtual sampler
+that is controlled using hand gestures. These gestures are based
+on finger tap movements of the right hand and the sound emitted
+is chosen by the finger that is registered as moving by the
+LeapMotion sensor.
+
+============FEATURES============
+
+*Play 5 different sounds (Kickdrum, Hi Hat, Cowbell, Clap, and
+Snare Drum)
+
+*Play over background music that comes packaged with the program
+(can be toggled)
+
+*Different functions for different hands: the right hand controls
+the sounds while the left hand controls the volume of the sounds
+
+*The option to toggle between text output and image output when
+creating sounds
+
+
