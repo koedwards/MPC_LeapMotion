@@ -23,6 +23,7 @@ public class GestureListener extends Listener {
 		if (gesture.get(0).hands().get(0).isRight()) {
 		if (gesture.count() > 0) {
 			if (currentGesture == null) {
+<<<<<<< HEAD
 					currentGesture = gesture.get(0).type().toString();
 					/*if (gesture.get(0).type() == Gesture.Type.TYPE_SWIPE) {
 						SwipeGesture swipeGesture = new SwipeGesture(gesture.get(0));
@@ -42,6 +43,10 @@ public class GestureListener extends Listener {
 						}
 					}*/
 			
+=======
+				currentGesture = gesture.get(0).type().toString();
+				
+>>>>>>> origin/master
 				if (gesture.get(0).type() == Gesture.Type.TYPE_KEY_TAP) {
 					Finger finger = (new Finger(new KeyTapGesture(gesture.get(0)).pointable()));
 					switch (finger.type()) {
@@ -62,7 +67,7 @@ public class GestureListener extends Listener {
 						
 						case TYPE_RING:
 							sp.playSound(SoundPlayer.DOWN);
-							lg.updateTextArea("KICKSTAND");
+							lg.updateTextArea("KICK");
 							break;
 						
 						case TYPE_PINKY:
