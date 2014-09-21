@@ -1,9 +1,6 @@
 package com.lithium;
 
-import javax.swing.*;
-import java.util.*;
 import java.awt.*;
-
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
@@ -12,6 +9,7 @@ import java.awt.event.KeyEvent;
 
 import com.leapmotion.leap.*;
 import java.io.IOException;
+
 import java.io.BufferedInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileInputStream;
@@ -28,6 +26,15 @@ import javax.sound.sampled.LineListener;
 import javax.sound.sampled.LineUnavailableException;
 import javax.sound.sampled.UnsupportedAudioFileException;
 
+import java.util.*;
+
+import javax.swing.*;
+import javax.swing.text.BadLocationException;
+import javax.swing.text.SimpleAttributeSet;
+import javax.swing.text.StyleConstants;
+import javax.swing.text.StyledDocument;
+
+
 public class LithiumGui extends JFrame {
 	static JTextPane textArea;
 	public static boolean useImages = false;
@@ -35,8 +42,6 @@ public class LithiumGui extends JFrame {
 	static Clip clip = null;
 	public static final String bg = "res/sounds/ascension.wav";
 	static HashMap<String, String> textToImages = new HashMap<String, String>();
-	
-	
 	
 	public static void addComponentsToPane(Container pane) {
 		pane.setLayout(new BorderLayout());
@@ -148,6 +153,22 @@ public class LithiumGui extends JFrame {
 	
 	public static void stopBackgroundMusic() {
 		clip.stop();
+	}
+	
+	public static void appendText(String s) {
+		if (useImages) {
+			return;
+		}
+		
+		SimpleAttributeSet attrs = new SimpleAttributeSet();
+		StyleConstants.setBold(attrs, true);
+		
+		StyledDocument doc = textArea.getStyledDocument();
+		try {
+			doc.insertString(doc.getLength(), "\n" + s, attrs);
+		} catch (BadLocationException e) {
+			e.printStackTrace();
+		}
 	}
 	
 	public static void main(String[] args) {
