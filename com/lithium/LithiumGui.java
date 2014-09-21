@@ -12,11 +12,28 @@ import java.awt.event.KeyEvent;
 
 import com.leapmotion.leap.*;
 import java.io.IOException;
+import java.io.BufferedInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileInputStream;
+import java.io.InputStream;
+
+import javax.sound.sampled.AudioFormat;
+import javax.sound.sampled.AudioInputStream;
+import javax.sound.sampled.AudioSystem;
+import javax.sound.sampled.Clip;
+import javax.sound.sampled.DataLine;
+import javax.sound.sampled.Line;
+import javax.sound.sampled.LineEvent;
+import javax.sound.sampled.LineListener;
+import javax.sound.sampled.LineUnavailableException;
+import javax.sound.sampled.UnsupportedAudioFileException;
 
 public class LithiumGui extends JFrame {
 	static JTextPane textArea;
 	public static boolean useImages = false;
 	public static boolean playBGMusic = false;
+	static Clip clip = null;
+	public static final String bg = "res/sounds/ascension.wav";
 	static HashMap<String, String> textToImages = new HashMap<String, String>();
 	
 	
@@ -80,7 +97,7 @@ public class LithiumGui extends JFrame {
 		
 		initMenuBar(frame);
 		
-		updateTextArea("this is a test string. test. test. test. test.");
+		updateTextArea("Welcome to Lithium! \n\nLithium is a virtual MPC that allows you to play a variety of 808 instruments. Explore the tools menu for more options. By default, no images are enabled.\n\nTo get started, wiggle your fingers above the attached Leap Motion sensor.");
 	}
 	
 	public static void updateTextArea(String s) {
@@ -93,6 +110,44 @@ public class LithiumGui extends JFrame {
 			textArea.setContentType("text/plain");
 			textArea.setText(s);
 		}
+	}
+	
+	public static void playBackgroundMusic() {
+		AudioInputStream bga = null;
+
+			try {
+				bga = AudioSystem.getAudioInputStream(new BufferedInputStream(new FileInputStream(bg)));
+			} catch (UnsupportedAudioFileException e) {
+				e.printStackTrace();
+			} catch (FileNotFoundException e1) {
+				e1.printStackTrace();
+			} catch (IOException e2) {
+				e2.printStackTrace();	
+			}	
+			AudioFormat fmt = bga.getFormat();
+			DataLine.Info info = new DataLine.Info(Clip.class, fmt);
+			
+			
+			try {
+				clip = (Clip) AudioSystem.getLine(info);
+				clip.open(bga);
+			} catch (LineUnavailableException e) {
+				e.printStackTrace();
+			} catch (IOException e1) {
+				e1.printStackTrace();
+			}
+			
+			if (clip == null) {
+				return;
+			}
+    
+			clip.setMicrosecondPosition(0L);
+			clip.start();
+		
+	}
+	
+	public static void stopBackgroundMusic() {
+		clip.stop();
 	}
 	
 	public static void main(String[] args) {
@@ -140,7 +195,12 @@ class ActionResponder implements ActionListener, ItemListener {
 			LithiumGui.useImages = (e.getStateChange() == ItemEvent.SELECTED);
 		}
 		else if (src.getText() == "Play BG Music") {
-			LithiumGui.playBGMusic = (e.getStateChange() == ItemEvent.SELECTED);
+			if (e.getStateChange() == ItemEvent.SELECTED) {
+				LithiumGui.playBackgroundMusic();
+			}
+			else {
+				LithiumGui.stopBackgroundMusic();
+			}
 		}
 	}
 }
