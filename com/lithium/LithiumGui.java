@@ -14,29 +14,27 @@ import com.leapmotion.leap.*;
 import java.io.IOException;
 
 public class LithiumGui extends JFrame {
-	static JTextArea textArea;
+	static JTextPane textArea;
+	public static boolean useImages = false;
+	static HashMap<String, String> textToImages = new HashMap<String, String>();
+	
+	
 	
 	public static void addComponentsToPane(Container pane) {
-		pane.setLayout(new GridBagLayout());
-		GridBagConstraints c = new GridBagConstraints();
-		c.fill = GridBagConstraints.HORIZONTAL;
- 
-		textArea = new JTextArea(5, 20);
+		pane.setLayout(new BorderLayout());
+		
+		textArea = new JTextPane();
 		textArea.setEditable(false);
-		JScrollPane scrollPane = new JScrollPane(textArea);
-		c.fill = GridBagConstraints.HORIZONTAL;
-		c.weightx = 0.0;
-		c.gridwidth = 3;
-		c.gridx = 0;
-		c.gridy = 1;
-		pane.add(textArea, c);
+		JScrollPane scroll = new JScrollPane(textArea);
+		scroll.setPreferredSize(new Dimension(250,200));
+		pane.add(scroll, BorderLayout.CENTER);
 	}
 	
-	private static void initMenuBar(Frame frame) {
+	private static void initMenuBar(JFrame frame) {
 		JMenuBar menuBar;
 		JMenu menu;
 		JMenuItem menuItem;
-		JCheckBoxMenuItem spectrogramEnable;
+		JCheckBoxMenuItem useImagesOption;
 		
 		menuBar = new JMenuBar();
 		
@@ -54,10 +52,10 @@ public class LithiumGui extends JFrame {
 		menu.getAccessibleContext().setAccessibleDescription("Contains tools for the Lithium program");
 		menuBar.add(menu);
 		
-		spectrogramEnable = new JCheckBoxMenuItem("Enable Spectrogram");
-		spectrogramEnable.setMnemonic(KeyEvent.VK_S);
-		spectrogramEnable.addItemListener(new ActionResponder());
-		menu.add(spectrogramEnable);
+		useImagesOption = new JCheckBoxMenuItem("Use images");
+		useImagesOption.setMnemonic(KeyEvent.VK_S);
+		useImagesOption.addItemListener(new ActionResponder());
+		menu.add(useImagesOption);
 		
 		frame.setJMenuBar(menuBar);
 	}
@@ -75,13 +73,29 @@ public class LithiumGui extends JFrame {
 		frame.setVisible(true);
 		
 		initMenuBar(frame);
+		
+		updateTextArea("this is a test string. test. test. test. test.");
 	}
 	
 	public static void updateTextArea(String s) {
-		textArea.setText(s);
+		if (useImages) {
+			textArea.setText("");
+			textArea.setContentType("text/html");
+			ImageIcon ico = new ImageIcon(textToImages.get(s));
+			textArea.insertIcon(ico);
+		} else {
+			textArea.setContentType("text/plain");
+			textArea.setText(s);
+		}
 	}
 	
 	public static void main(String[] args) {
+		textToImages.put("CLAP", 	"res/img/stock-footage-clapping-hands-silhouette-v-white.png");
+		textToImages.put("COWBELL", "res/img/cow-bell-md.png");
+		textToImages.put("HIHAT", 	"res/img/highhat.png");
+		textToImages.put("KICK", 	"res/img/kick.png");
+		textToImages.put("SNARE", 	"res/img/snare.png");
+	
 		javax.swing.SwingUtilities.invokeLater(new Runnable() {
 			public void run() {
 				createAndShowGUI();
@@ -113,6 +127,6 @@ class ActionResponder implements ActionListener, ItemListener {
 	
 	public void itemStateChanged(ItemEvent e) {
 		JMenuItem src = (JMenuItem)(e.getSource());
-		System.out.println("itemstate: " + src.getText() + "/" + ((e.getStateChange() == ItemEvent.SELECTED) ? "selected" : "unselected"));
+		LithiumGui.useImages = (e.getStateChange() == ItemEvent.SELECTED);
 	}
 }
