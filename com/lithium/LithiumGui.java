@@ -20,6 +20,7 @@ import javax.swing.text.StyledDocument;
 public class LithiumGui extends JFrame {
 	static JTextPane textArea;
 	public static boolean useImages = false;
+	public static boolean playBGMusic = false;
 	static HashMap<String, String> textToImages = new HashMap<String, String>();
 	
 	public static void addComponentsToPane(Container pane) {
@@ -28,7 +29,7 @@ public class LithiumGui extends JFrame {
 		textArea = new JTextPane();
 		textArea.setEditable(false);
 		JScrollPane scroll = new JScrollPane(textArea);
-		scroll.setPreferredSize(new Dimension(250,200));
+		scroll.setPreferredSize(new Dimension(300,300));
 		pane.add(scroll, BorderLayout.CENTER);
 	}
 	
@@ -36,7 +37,7 @@ public class LithiumGui extends JFrame {
 		JMenuBar menuBar;
 		JMenu menu;
 		JMenuItem menuItem;
-		JCheckBoxMenuItem useImagesOption;
+		JCheckBoxMenuItem useImagesOption, playBackgroundMusic;
 		
 		menuBar = new JMenuBar();
 		
@@ -58,6 +59,11 @@ public class LithiumGui extends JFrame {
 		useImagesOption.setMnemonic(KeyEvent.VK_S);
 		useImagesOption.addItemListener(new ActionResponder());
 		menu.add(useImagesOption);
+		
+		playBackgroundMusic = new JCheckBoxMenuItem("Play BG Music");
+		playBackgroundMusic.setMnemonic(KeyEvent.VK_B);
+		playBackgroundMusic.addItemListener(new ActionResponder());
+		menu.add(playBackgroundMusic);
 		
 		frame.setJMenuBar(menuBar);
 	}
@@ -113,6 +119,9 @@ public class LithiumGui extends JFrame {
 		textToImages.put("HIHAT", 	"res/img/highhat.png");
 		textToImages.put("KICK", 	"res/img/kick.png");
 		textToImages.put("SNARE", 	"res/img/snare.png");
+		textToImages.put("VOLUME_UP", 	"res/img/uparrow.png");
+		textToImages.put("VOLUME_DOWN", 	"res/img/downarrow.png");
+
 	
 		javax.swing.SwingUtilities.invokeLater(new Runnable() {
 			public void run() {
@@ -145,6 +154,11 @@ class ActionResponder implements ActionListener, ItemListener {
 	
 	public void itemStateChanged(ItemEvent e) {
 		JMenuItem src = (JMenuItem)(e.getSource());
-		LithiumGui.useImages = (e.getStateChange() == ItemEvent.SELECTED);
+		if (src.getText() == "Use images") {
+			LithiumGui.useImages = (e.getStateChange() == ItemEvent.SELECTED);
+		}
+		else if (src.getText() == "Play BG Music") {
+			LithiumGui.playBGMusic = (e.getStateChange() == ItemEvent.SELECTED);
+		}
 	}
 }
