@@ -31,19 +31,8 @@ public class LithiumGui extends JFrame {
 		c.gridy = 1;
 		pane.add(textArea, c);
 	}
-
-	private static void createAndShowGUI() {
-		//Create and set up window
-		JFrame frame = new JFrame("Lithium");
-		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 	
-		//Set up the content pane.
-		addComponentsToPane(frame.getContentPane());
-	
-		//Display the window.
-		frame.pack();
-		frame.setVisible(true);
-		
+	private static void initMenuBar(Frame frame) {
 		JMenuBar menuBar;
 		JMenu menu;
 		JMenuItem menuItem;
@@ -71,6 +60,21 @@ public class LithiumGui extends JFrame {
 		menu.add(spectrogramEnable);
 		
 		frame.setJMenuBar(menuBar);
+	}
+
+	private static void createAndShowGUI() {
+		//Create and set up window
+		JFrame frame = new JFrame("Lithium");
+		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+	
+		//Set up the content pane.
+		addComponentsToPane(frame.getContentPane());
+	
+		//Display the window.
+		frame.pack();
+		frame.setVisible(true);
+		
+		initMenuBar(frame);
 	}
 	
 	public static void updateTextArea(String s) {
