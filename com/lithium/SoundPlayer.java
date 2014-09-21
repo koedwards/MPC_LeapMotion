@@ -14,6 +14,7 @@ import javax.sound.sampled.AudioInputStream;
 import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.Clip;
 import javax.sound.sampled.DataLine;
+import javax.sound.sampled.FloatControl;
 import javax.sound.sampled.Line;
 import javax.sound.sampled.LineEvent;
 import javax.sound.sampled.LineListener;
@@ -26,6 +27,9 @@ public class SoundPlayer {
   public static final String UP    = "res/sounds/hihat.wav";
   public static final String DOWN  = "res/sounds/kick.wav";
   public static final String TAP   = "res/sounds/snare.wav";
+  
+  String[] count = {LEFT, RIGHT, UP, DOWN, TAP};
+  int i;
   
   HashMap<String,Clip> clips = new HashMap<String,Clip>();
 
@@ -63,6 +67,29 @@ public class SoundPlayer {
       clips.put(name, clip);
     }
   }
+  
+  public void adjustVolume(float vel) {
+		while (i < count.length-1) {
+			FloatControl volume = (FloatControl) clips.get(count[i]).getControl(FloatControl.Type.MASTER_GAIN);
+			float dB = (float) (Math.log(.5) / Math.log(10.0) * 20.0);
+			if ((int)vel < 0) {
+				volume.setValue((float)clips.get(count[i]).getLevel() - dB);
+				i++;
+				System.out.println(vel);
+				System.out.println(dB);
+				System.out.println((float)clips.get(count[i]).getLevel() - dB);
+			}
+			else {
+				volume.setValue((float)clips.get(count[i]).getLevel() + dB);
+				i++;
+				System.out.println(vel);
+				System.out.println(dB);
+				System.out.println((float)clips.get(count[i]).getLevel() - dB);
+			}
+		}
+		System.out.println("Called adjustVolume");
+		i = 0;
+	}
   
   public void playSound(String sound) {
     Clip theClip = clips.get(sound);

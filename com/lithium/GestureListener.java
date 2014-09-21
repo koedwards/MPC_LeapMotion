@@ -20,27 +20,28 @@ public class GestureListener extends Listener {
 	public void onFrame(Controller c) {
 		//System.out.println("frame available");
 		GestureList gesture = c.frame().gestures();
+		if (gesture.get(0).hands().get(0).isRight()) {
 		if (gesture.count() > 0) {
 			if (currentGesture == null) {
-				currentGesture = gesture.get(0).type().toString();
-				/*if (gesture.get(0).type() == Gesture.Type.TYPE_SWIPE) {
-					SwipeGesture swipeGesture = new SwipeGesture(gesture.get(0));
-					Vector swipeDirection = swipeGesture.direction();
-					if (swipeDirection.getX() >= swipeDirection.getY()) {
-						if (swipeDirection.getX() < 0) {
-							sp.playSound(SoundPlayer.LEFT);
+					currentGesture = gesture.get(0).type().toString();
+					/*if (gesture.get(0).type() == Gesture.Type.TYPE_SWIPE) {
+						SwipeGesture swipeGesture = new SwipeGesture(gesture.get(0));
+						Vector swipeDirection = swipeGesture.direction();
+						if (swipeDirection.getX() >= swipeDirection.getY()) {
+							if (swipeDirection.getX() < 0) {
+								sp.playSound(SoundPlayer.LEFT);
+							} else {
+								sp.playSound(SoundPlayer.RIGHT);
+							}
 						} else {
-							sp.playSound(SoundPlayer.RIGHT);
+							if (swipeDirection.getY() < 0) {
+								sp.playSound(SoundPlayer.DOWN);
+							} else {
+								sp.playSound(SoundPlayer.UP);
+							}
 						}
-					} else {
-						if (swipeDirection.getY() < 0) {
-							sp.playSound(SoundPlayer.DOWN);
-						} else {
-							sp.playSound(SoundPlayer.UP);
-						}
-					}
-				}*/
-				
+					}*/
+			
 				if (gesture.get(0).type() == Gesture.Type.TYPE_KEY_TAP) {
 					Finger finger = (new Finger(new KeyTapGesture(gesture.get(0)).pointable()));
 					switch (finger.type()) {
@@ -79,5 +80,18 @@ public class GestureListener extends Listener {
 		} else {
 			currentGesture = null;
 		}
+		}
+		if (gesture.get(0).hands().get(0).isLeft()) {
+			Vector handCenter = gesture.get(0).hands().get(0).palmVelocity();
+			if (handCenter.getY() > 0) {
+				lg.updateTextArea("Increase Volume " + handCenter.getY());
+				sp.adjustVolume(handCenter.getY());
+			}
+			else {
+				lg.updateTextArea("Decrease Volume " + handCenter.getY());
+				sp.adjustVolume(handCenter.getY());
+			}
+		}
+		
 	}
 }
