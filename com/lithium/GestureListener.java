@@ -68,11 +68,11 @@ public class GestureListener extends Listener {
 		if (gesture.get(0).hands().get(0).isLeft()) {
 			Vector handCenter = gesture.get(0).hands().get(0).palmVelocity();
 			if (handCenter.getY() > 0) {
-				lg.updateTextArea("Increase Volume " + handCenter.getY());
+				lg.updateTextArea("VOLUME_UP");
 				sp.adjustVolume(handCenter.getY());
 			}
 			else {
-				lg.updateTextArea("Decrease Volume " + handCenter.getY());
+				lg.updateTextArea("VOLUME_DOWN");
 				sp.adjustVolume(handCenter.getY());
 			}
 		}
