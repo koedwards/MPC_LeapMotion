@@ -57,6 +57,7 @@ public class GestureListener extends Listener {
 						default:
 							break;
 					}
+					lg.appendText(Float.toString(sp.getGain()));
 					
 					System.out.println("type: " + finger.type());
 				}
@@ -68,11 +69,11 @@ public class GestureListener extends Listener {
 		if (gesture.get(0).hands().get(0).isLeft()) {
 			Vector handCenter = gesture.get(0).hands().get(0).palmVelocity();
 			if (handCenter.getY() > 0) {
-				lg.updateTextArea("Increase Volume " + handCenter.getY());
+				lg.updateTextArea("Decrease Volume " + handCenter.getY());
 				sp.adjustVolume(handCenter.getY());
 			}
 			else {
-				lg.updateTextArea("Decrease Volume " + handCenter.getY());
+				lg.updateTextArea("Increase Volume " + handCenter.getY());
 				sp.adjustVolume(handCenter.getY());
 			}
 		}

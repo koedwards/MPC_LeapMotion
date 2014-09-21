@@ -1,9 +1,6 @@
 package com.lithium;
 
-import javax.swing.*;
-import java.util.*;
 import java.awt.*;
-
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.ItemEvent;
@@ -12,13 +9,18 @@ import java.awt.event.KeyEvent;
 
 import com.leapmotion.leap.*;
 import java.io.IOException;
+import java.util.*;
+
+import javax.swing.*;
+import javax.swing.text.BadLocationException;
+import javax.swing.text.SimpleAttributeSet;
+import javax.swing.text.StyleConstants;
+import javax.swing.text.StyledDocument;
 
 public class LithiumGui extends JFrame {
 	static JTextPane textArea;
 	public static boolean useImages = false;
 	static HashMap<String, String> textToImages = new HashMap<String, String>();
-	
-	
 	
 	public static void addComponentsToPane(Container pane) {
 		pane.setLayout(new BorderLayout());
@@ -86,6 +88,22 @@ public class LithiumGui extends JFrame {
 		} else {
 			textArea.setContentType("text/plain");
 			textArea.setText(s);
+		}
+	}
+	
+	public static void appendText(String s) {
+		if (useImages) {
+			return;
+		}
+		
+		SimpleAttributeSet attrs = new SimpleAttributeSet();
+		StyleConstants.setBold(attrs, true);
+		
+		StyledDocument doc = textArea.getStyledDocument();
+		try {
+			doc.insertString(doc.getLength(), "\n" + s, attrs);
+		} catch (BadLocationException e) {
+			e.printStackTrace();
 		}
 	}
 	

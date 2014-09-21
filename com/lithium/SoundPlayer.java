@@ -71,24 +71,33 @@ public class SoundPlayer {
   public void adjustVolume(float vel) {
 		while (i < count.length-1) {
 			FloatControl volume = (FloatControl) clips.get(count[i]).getControl(FloatControl.Type.MASTER_GAIN);
+			// all this weirdness is due to the fact that log(0.5) is negative
+			// so everything that follows is definitely non-intuitive
 			float dB = (float) (Math.log(.5) / Math.log(10.0) * 20.0);
 			if ((int)vel < 0) {
-				volume.setValue((float)clips.get(count[i]).getLevel() - dB);
+				if ((volume.getValue() - dB) > volume.getMaximum()) {
+					volume.setValue(volume.getMaximum());
+				} else {
+					volume.setValue(volume.getValue() - dB);
+				}
 				i++;
-				System.out.println(vel);
-				System.out.println(dB);
-				System.out.println((float)clips.get(count[i]).getLevel() - dB);
 			}
 			else {
-				volume.setValue((float)clips.get(count[i]).getLevel() + dB);
+				if ((volume.getValue() + dB) < volume.getMinimum()) {
+					volume.setValue(volume.getMinimum());
+				} else {
+					volume.setValue(volume.getValue() + dB);
+				}
 				i++;
-				System.out.println(vel);
-				System.out.println(dB);
-				System.out.println((float)clips.get(count[i]).getLevel() - dB);
 			}
 		}
 		System.out.println("Called adjustVolume");
 		i = 0;
+	}
+	
+	public float getGain() {
+		FloatControl volume = (FloatControl) clips.get(count[1]).getControl(FloatControl.Type.MASTER_GAIN);
+		return volume.getValue();
 	}
   
   public void playSound(String sound) {
@@ -96,6 +105,9 @@ public class SoundPlayer {
     if (theClip == null) {
       return;
     }
+	
+	FloatControl volume = (FloatControl) theClip.getControl(FloatControl.Type.MASTER_GAIN);
+	System.out.println("volume: " + volume.getMaximum() + "///" + volume.getValue() + "///" + volume.getMinimum());
     
     theClip.setMicrosecondPosition(0L);
     theClip.start();
